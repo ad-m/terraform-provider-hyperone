@@ -20,6 +20,8 @@ func TestAccHyperoneDisk_basic(t *testing.T) {
 				Config: testAccHyperoneDiskConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAccDisk("hyperone_disk.foo", &n),
+					resource.TestCheckResourceAttr("hyperone_disk.foo", "name", "acceptable_disk"),
+					resource.TestCheckResourceAttr("hyperone_disk.foo", "type", "ssd"),
 				),
 			},
 		},
@@ -82,7 +84,7 @@ func TestAccHyperoneDisk_updateSize(t *testing.T) {
 
 const testAccHyperoneDiskResizedConfig = `
 resource "hyperone_disk" "foo" {
-  name = "ptr.example.com"
+  name = "acceptable_disk"
   type = "ssd"
   size = 15
 }
