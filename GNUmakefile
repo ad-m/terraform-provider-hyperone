@@ -1,6 +1,8 @@
 TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 PKG_NAME=hyperone
+REGISTRY="h1cr.io"
+VERSION_TAG=latest
 
 default: build
 
@@ -40,5 +42,11 @@ test-compile:
 		exit 1; \
 	fi
 	go test -c $(TEST) $(TESTARGS)
+
+build-docker:
+	@docker build -t $(REGISTRY)/terraform-provider-hyperone:$(VERSION_TAG) .
+
+deploy-docker: build-docker
+	@docker push $(REGISTRY)/terraform-provider-hyperone:$(VERSION_TAG)
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck test-compile
